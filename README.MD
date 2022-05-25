@@ -24,8 +24,8 @@ The code is written using the application factory pattern and is neat and extens
 written using Jinja2 and HTML best practices. 
 
 <p align="center">
-  <img src="/.images/login_page.png" width="200px" height='100%'>
-  <img src="/.images/reg_page.png" width="200px" height='100%'>
+  <img src="/.images/login_page.png" width="450px" height='100%'>
+  <img src="/.images/reg_page.png" width="450px" height='100%'>
 </p>
 
 ### Getting Started:
