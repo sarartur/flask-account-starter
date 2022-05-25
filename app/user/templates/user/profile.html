@@ -1,0 +1,50 @@
+{% extends 'core/layout.html' %}
+{% block content %}
+{% with user=user %}
+    {% include 'user/_header.html' %}
+{% endwith %}
+<div class="row justify-content-center">
+    <div class="col-11 border rounded bg-white">
+        <div class="row border-bottom py-2">
+            <div class="col-12">
+                <span class="fw-bold">
+                    Logins
+                </span>
+            </div>
+        </div>
+        <div class="row bg-light border-bottom py-1">
+            <div class="col-8">
+                address
+            </div>
+            <div class="col-4 text-end">
+                date
+            </div>
+        </div>
+        {% if login_records.items %}
+            {% for record in login_records.items %}
+                <div class="row border-bottom align-items-center py-2">
+                    <div class="col-8 text-truncate">
+                        {{ record.ip_address }}
+                    </div>
+                    <div class="col-4 text-end text-truncate small">
+                        {{ record.timestamp.strftime('%c') }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+        <div class="row py-5">
+            <div class="col-12 text-center">
+                <span class="text-secondary">None</span>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row rounded-bottom">
+            <div class="col-12">
+                {% with obj=login_records, route='user.profile', extra_kwargs=dict(**request.args) %}
+                    {% include 'core/components/pagination.html' %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

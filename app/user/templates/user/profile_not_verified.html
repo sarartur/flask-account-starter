@@ -1,0 +1,25 @@
+{% extends 'core/layout.html' %}
+{% block content %}
+{% with user=user %}
+    {% include 'user/_header.html' %}
+{% endwith %}
+<div class="row justify-content-center mt-5">
+    <div class="col-11 col-md-6 col-lg-4 border rounded bg-white p-3">
+        <div class="row py-3">
+            <div class="col-12 text-center">
+                Your account is not verified, please verify your email.
+            </div>
+        </div>
+        <div class="row justify-content-center border-top pt-3 g-0">
+            <div class="col-auto">
+                <form method="POST">
+                    {{ form.csrf_token }}
+                    <button class="btn btn-primary btn-sm">
+                        Resend Email
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

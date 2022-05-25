@@ -1,0 +1,25 @@
+{% set extra_kwargs=extra_kwargs or dict() %}
+{% if 'page' in extra_kwargs.keys() %}
+    {% do extra_kwargs.pop('page') %}
+{% endif %}
+<div class="row">
+    <div class="col-12 py-2">
+        <ul class="pagination justify-content-center mb-0">
+            {% if obj.items %}
+                {% for page_num in obj.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if page_num %}
+                        <li class="page-item {% if obj.page == page_num %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for(route, page=page_num, **extra_kwargs ) }}">{{ page_num }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">...</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <span class="h4">...</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
