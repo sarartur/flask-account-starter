@@ -1,7 +1,7 @@
 ## Flask-Account-Starter
 Flask-Account-Starter is a flexible and extensible Flask boilerplate template that contains essential functions required of an application with user accounts.
 
-### Features:
+### Features
 The application comes out of the box with the following features:
 - Account Creation
 - Account Verification (enabled / disabled)
@@ -28,7 +28,7 @@ written using Jinja2 and HTML best practices.
   <img src="/.images/reg_page.png" width="600px" height='100%'>
 </p>
 
-### Getting Started:
+### Getting Started
 
 The application requires `python3.8` or higher.
 
@@ -68,7 +68,7 @@ At this point the application should be good to launch in development mode with:
 flask run
 ```
 
-### Next Steps:
+### Next Steps
 To enable email verification and password verification functionality you will need to connect an email account to ```Flask-Mail``` (see [documentation](https://pythonhosted.org/Flask-Mail/)) and also create an generate an ```JWT RS256``` key pair:
 
 ```
@@ -84,7 +84,7 @@ export ACCOUNT_VERIFICATION='True'
 ```
 At this point all of the apps functionality is activated. You can continue building on top of the code using the general principles of `Flask` factory patter design.
 
-### Contact:
-Email me at sarartur.ruk@gmail.com or open a new [Issue](https://github.com/sarartur/flask-account-starter) on Github.
+### Contact
+ - Email me at sarartur.ruk@gmail.com or open a new [Issue](https://github.com/sarartur/flask-account-starter) on Github.
 
 
