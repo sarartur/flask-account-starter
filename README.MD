@@ -124,7 +124,7 @@ app
 │           └── password_reset.html
 ├── extensions                                #Application extensions
 │   ├── bcrypt.py                             #Flask-Bcrypt
-│   ├── database.py                           #Flask-SQLAlchemy
+│   ├── database.py                           #Flask-SQLAlchemy, Flask-Migrate
 │   ├── flask_login.py                        #Flask-Login
 │   ├── flask_mail.py                         #Flask-Mail
 │   └── __init__.py
