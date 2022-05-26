@@ -91,9 +91,9 @@ At this point all of the apps functionality is activated. You can continue build
 ```
 app
 ├── __init__.py                               #Application factory. 
-├── auth                                      #Authentication blueprint.
+├── auth                                    
 │   ├── forms.py                              #Login, Register and Password Reset forms.
-│   ├── __init__.py                           #Authentication Blueprint.
+│   ├── __init__.py                           #Authentication Blueprint, login_required func.
 │   ├── routes.py                             #Login, logout, register, etc. routes.
 │   ├── templates                             #Auth templates for routes above.
 │   │   └── auth
@@ -103,7 +103,7 @@ app
 │   │       ├── password_reset_request.html
 │   │       └── register.html
 │   └── utils.py
-├── config.py                                 #Configuration File. See README.MD
+├── config.py                                 #Configuration File. See README.MD.
 ├── core                                      
 │   ├── __init__.py                           #Core Blueprint.
 │   ├── models.py                             #BaseMixin class.
@@ -117,7 +117,7 @@ app
 │           │   └── pagination.html
 │           └── layout.html                   #Application layout.
 ├── email                                         
-│   ├── __init__.py                           #Email Blueprint and send functions.
+│   ├── __init__.py                           #Email Blueprint and send func.
 │   └── templates
 │       └── email                             #Email templates.
 │           ├── account_verification.html
@@ -138,8 +138,8 @@ app
 │   ├── cli.py                                #Cli for user model: add user, get passwd reset link.
 │   ├── enums.py                              #UserAccountLog action types and Block reasons types.
 │   ├── forms.py                              #Verification email request form.
-│   ├── __init__.py                           #User Blueprint
-│   ├── models.py                             #UserAccount and UserAccountLog models
+│   ├── __init__.py                           #User Blueprint.
+│   ├── models.py                             #UserAccount and UserAccountLog models.
 │   ├── routes.py                             #User profile routes.
 │   └── templates                             #User templates.
 │       └── user
@@ -147,7 +147,7 @@ app
 │           ├── profile.html
 │           └── profile_not_verified.html
 └── wsgi                                         
-    └── __init__.py                           #Application instance for `create_app` function.
+    └── __init__.py                           #Application instance.
 
 ```
 
