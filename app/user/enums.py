@@ -8,6 +8,7 @@ class AccountLogActions(enum.Enum):
     PASSWORD_RESET = dict(msg='password reset', category='info')
     ACCOUNT_BLOCKED = dict(msg='account blocked', category='danger')
     ACCOUNT_UNBLOCKED = dict(msg='account unblocked', category='success')
+    NEW_IP_VERIFIED = dict(msg='new ip verified', category='warning')
 
 class AccountBlockReasons(enum.Enum):
     LOGIN_ATTEMPTS_EXCEEDED = 'login attempts exceeded'

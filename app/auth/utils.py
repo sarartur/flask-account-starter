@@ -8,3 +8,5 @@ def validate_password(string_):
         not re.search('[A-Z]', string_)):
         return False
     return True
+
+

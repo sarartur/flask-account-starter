@@ -2,6 +2,6 @@
     <h5>Welcome to {{ app_name}}!</h5>
 </div>
 <div style="margin-top: 10px;">
-    Click on the to verify your account: 
+    Click on the link to verify your account: 
     {{  url_for('auth.user_verify', token=user.get_token(), _external=True) }}
 </div>

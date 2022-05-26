@@ -1,4 +1,4 @@
-from datetime import datetime
+from os import curdir
 from flask import (
     current_app,
     render_template, 
@@ -6,7 +6,6 @@ from flask import (
     url_for,
     flash,
 )
-from flask_mail import Message
 from flask_login import (
     current_user,
 )
@@ -16,7 +15,8 @@ from sqlalchemy.exc import IntegrityError
 from . import (
     auth_bp,
     verification_setting_required,
-    login_required
+    login_required,
+    handlers
 )
 from .forms import (
     LoginForm,
@@ -29,8 +29,8 @@ from .. import (
     bcrypt,
     email
 )
-from ..user.enums import AccountLogActions
 from ..user.models import UserAccount
+from ..user.enums import AccountLogActions
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -38,21 +38,22 @@ def login():
         return redirect(url_for('core.home'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = UserAccount.query.filter(
-            func.lower(UserAccount.email) == func.lower(form.email.data))\
+        user = UserAccount.query\
+            .filter(func.lower(UserAccount.email) == func.lower(form.email.data))\
             .first()
-        if user:
-            if user.is_blocked:
-                flash(f'Your account has been blocked. Reason: {user.block_reason.value}', 'danger')
-            else:
-                if bcrypt.check_password_hash(user.password, form.password.data):
-                    user.login(form.remember_me.data)
-                    flash('You have been logged in!', 'success')
-                    return redirect(url_for('user.profile'))
-                else:
-                    user.reg_login_failure()
-                    flash('Invalid Credentials', 'danger')
+        err = handlers.handle_login(user, form.password.data, form.remember_me.data)
+        if not err:
+            return redirect(url_for('core.home'))
     return render_template('auth/login.html', form=form)
+
+@auth_bp.route('/login/verify-ip/<string:token>')
+def ip_verify(token):
+    user = UserAccount.verify_token(token)
+    if not user:
+        flash('Invalid or expired token.', 'danger')
+    user.add_log(AccountLogActions.NEW_IP_VERIFIED)
+    flash('IP Address verified, you can now login.', 'success')
+    return redirect(url_for('auth.login'))
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -70,9 +71,7 @@ def register():
         except IntegrityError:
             flash('An error has occurred, please try again.', 'danger')
         else:
-            flash('Account created', 'success')
-            if current_app.config['ACCOUNT_VERIFICATION']:
-                email.send_verification(user)
+            handlers.handle_registration(user)
             return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)
 
@@ -101,8 +100,7 @@ def password_reset(token):
         return redirect(redirect_route)
     form = PasswordForm()
     if form.validate_on_submit():
-        user.set_new_password(passwd=form.password.data)
-        flash('Password reset successfully!', 'success')
+        handlers.handle_password_change(user, form.password.data)
         return redirect(redirect_route)
     return render_template('auth/password_reset.html', user=user, form=form)
 
@@ -115,7 +113,7 @@ def user_verify(token):
     if not user:
         flash('Invalid or expired token.', 'danger')
     elif user.is_verified:
-        flash('Account already verified', 'info')
+        flash('Account already verified.', 'info')
     else:
         user.is_verified = True
         db.session.commit()
@@ -125,6 +123,5 @@ def user_verify(token):
 @auth_bp.route('/logout')
 @login_required(verified_only=False)
 def logout():
-    current_user.logout()
-    flash('You have been logged out!', 'info')
+    handlers.handle_logout(current_user)
     return redirect(url_for('auth.login'))

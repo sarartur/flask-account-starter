@@ -1,16 +1,11 @@
-from ipaddress import ip_address
 from authlib.jose import JsonWebToken
 from datetime import datetime
 from flask import (
     current_app, 
     request
 )
-from flask_login import (
-    UserMixin,
-    login_user,
-    logout_user
-)
-from sqlalchemy import desc
+from flask_login import (UserMixin)
+from sqlalchemy import and_
 
 from .enums import (
     AccountLogActions,
@@ -19,7 +14,6 @@ from .enums import (
 from .. import (
     db, 
     login_manager,
-    bcrypt
 )
 from ..core.models import BaseMixin
 
@@ -33,71 +27,28 @@ class UserAccount(BaseMixin, UserMixin, db.Model):
     is_blocked = db.Column(db.Boolean, default=False)
     block_reason = db.Column(db.Enum(AccountBlockReasons))
 
-    logins = db.relationship('UserAccountLog', backref='user')
+    logs = db.relationship('UserAccountLog', backref='user')
 
-    def login(self, remember):
-        login_user(self, remember=remember)
+    def add_log(self, action, ip_address=None, commit=True):
         db.session.add(UserAccountLog(
             user_id=self.id,
-            action=AccountLogActions.LOGIN_SUCCESS
+            action=action,
+            ip_address=ip_address or request.remote_addr
         ))
-        db.session.commit()
-    
-    def logout(self):
-        logout_user()
-        db.session.add(UserAccountLog(
-            user_id=self.id,
-            action=AccountLogActions.LOGOUT
-        ))
-        db.session.commit()
+        if commit:
+            db.session.commit()
 
-    def reg_login_failure(self):
-        db.session.add(UserAccountLog(
-            user_id=self.id,
-            action=AccountLogActions.LOGIN_FAILURE
-        ))
-        db.session.commit()
-        last_login_or_passwd_reset = UserAccountLog.query\
-            .filter(UserAccountLog.action in [
-                AccountLogActions.LOGIN_SUCCESS, 
-                AccountLogActions.PASSWORD_RESET
-            ])\
-            .order_by(desc(UserAccountLog.timestamp))\
-            .first()
-        failed_attempts_since_query = UserAccountLog.query\
-            .filter_by(action=AccountLogActions.LOGIN_FAILURE)
-        if last_login_or_passwd_reset:
-            failed_attempts_since_query = failed_attempts_since_query\
-                .filter(UserAccountLog.timestamp > last_login_or_passwd_reset.timestamp)
-        failed_attempts_since = failed_attempts_since_query.count()
-        if failed_attempts_since >= current_app.config['LOGIN_MAX_RETIRES']:
-            self.update(
-                is_blocked=True,
-                block_reason=AccountBlockReasons.LOGIN_ATTEMPTS_EXCEEDED
-            )
-            db.session.add(UserAccountLog(
-                user_id=self.id,
-                action=AccountLogActions.ACCOUNT_BLOCKED
-            ))
-        db.session.commit()
+    @property
+    def logins(self):
+        return [log for log in self.logs if log.action.name==AccountLogActions.LOGIN_SUCCESS.name]
 
-    def set_new_password(self, passwd):
-        was_blocked = self.is_blocked
-        self.update(
-            password=bcrypt.generate_password_hash(passwd).decode('utf-8'),
-            is_blocked=False,
-            reason_blocked=None
-        )
-        db.session.add(UserAccountLog(
-            user_id=self.id,
-            action=AccountLogActions.PASSWORD_RESET
-        ))
-        if was_blocked:
-            db.session.add(UserAccountLog(
-                user_id=self.id,
-                action=AccountLogActions.ACCOUNT_UNBLOCKED
-            ))
-        db.session.commit()
+    @property
+    def last_login(self):
+        return self.logins[0]
+
+    @property
+    def verified_ips(self):
+        return [log.ip_address for log in self.logs if log.action.name==AccountLogActions.NEW_IP_VERIFIED.name]
 
     def get_token(self):
         jwt = JsonWebToken(['RS256'])

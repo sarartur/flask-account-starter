@@ -12,6 +12,7 @@ from .. import (
     db
 )
 from ..config import Environments
+from ..auth.handlers import logout_user
 
 APP_NAME = 'App'
 
@@ -35,6 +36,8 @@ def before_app_first_request():
 @core_bp.before_app_request
 def before_app_request():
     if current_user.is_authenticated:
+        if current_user.is_blocked:
+            logout_user(current_user)
         current_user.last_active = datetime.utcnow()
         db.session.commit()
 

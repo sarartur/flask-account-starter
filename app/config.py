@@ -28,6 +28,7 @@ PWD_RESET_EXP = timedelta(seconds=os.environ.get('PWD_RESET_EXP', 3_600))
 ACCOUNT_VERIFICATION = JWT_PRIVATE_KEY and JWT_PUBLIC_KEY and os.environ.get('ACCOUNT_VERIFICATION', False)
 REMEMBER_COOKIE_DURATION = timedelta(seconds=os.environ.get('REMEMBER_COOKIE_DURATION', 3_600 * 24 * 7))
 LOGIN_MAX_RETIRES = os.environ.get('LOGIN_MAX_RETIRES', 4)
+LOGIN_NEW_IP_VERIFY = os.environ.get('LOGIN_NEW_IP_VERIFY', True)
 
 #Email
 MAIL_SERVER = os.environ.get('MAIL_SERVER', 'localhost')

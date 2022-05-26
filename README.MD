@@ -8,6 +8,8 @@ Flask-Account-Starter is a flexible and extensible Flask boilerplate template th
 The application comes out of the box with the following features:
 - Account Creation
 - Account Verification (enabled / disabled)
+- New Login IP detection / verification
+- Block after `x` Login Attempts
 - Password Reset
 - User Activity Log
 - Automated Emails
@@ -85,6 +87,12 @@ export JWT_PRIVATE_KEY='/path/to/jwtRS256.key'
 export JWT_PUBLIC_KEY='/path/to/public/jwtRS256.key.pub'
 export ACCOUNT_VERIFICATION='True'
 ```
+The application also supports new IP login verification and account block due to unsuccessful attempts.
+```
+export LOGIN_MAX_RETIRES=4
+export LOGIN_NEW_IP_VERIFY='True'
+```
+
 At this point all of the apps functionality is activated. You can continue building on top of the code using the general principles of `Flask` factory patter design.
 
 ### Layout
@@ -95,6 +103,7 @@ app
 │   ├── forms.py                              #Login, Register and Password Reset forms.
 │   ├── __init__.py                           #Authentication Blueprint, login_required func.
 │   ├── routes.py                             #Login, logout, register, etc. routes.
+|   ├── handlers.py                           #Handlers for authentication logic.
 │   ├── templates                             #Auth templates for routes above.
 │   │   └── auth
 │   │       ├── _header.html
@@ -120,6 +129,7 @@ app
 │   ├── __init__.py                           #Email Blueprint and send func.
 │   └── templates
 │       └── email                             #Email templates.
+|           ├── login_verification.html
 │           ├── account_verification.html
 │           └── password_reset.html
 ├── extensions                                #Application extensions

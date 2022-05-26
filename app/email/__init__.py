@@ -27,4 +27,15 @@ def send_verification(user, with_flash=True):
     )
     mail.send(msg)
     if with_flash:
-        flash(f'Verification email sent to {user.email}', 'info')
+        flash(f'Account verification email sent to {user.email}', 'info')
+
+def send_login_confirmation(user, ip_address, with_flash=True):
+    msg = Message(
+        subject='Security Alert',
+        html=render_template('email/login_verification.html', 
+            user=user, ip_address=ip_address),
+        recipients=[user.email]
+    )
+    mail.send(msg)
+    if with_flash:
+        flash(f'Login verification email sent to {user.email}', 'info')

@@ -1,4 +1,3 @@
-from textwrap import wrap
 from flask import (
     Blueprint,
     current_app,
@@ -7,7 +6,7 @@ from flask import (
 )
 from flask_login import (
     login_required as _login_required,
-    current_user
+    current_user,
 )
 import functools
 

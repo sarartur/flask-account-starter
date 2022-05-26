@@ -1,0 +1,7 @@
+<div>
+    <h5>New login location detected. IP address: {{ ip_address }}</h5>
+</div>
+<div style="margin-top: 10px;">
+    Click on the link verify new login: 
+    {{  url_for('auth.ip_verify', token=user.get_token(), _external=True) }}
+</div>
