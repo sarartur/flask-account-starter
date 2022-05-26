@@ -90,12 +90,12 @@ At this point all of the apps functionality is activated. You can continue build
 ### Layout
 ```
 app
-├── __init__.py                                    #Application factory. 
-├── auth                                           #Authentication blueprint.
-│   ├── forms.py                                   #Login, Register and Password Reset forms.
-│   ├── __init__.py
-│   ├── routes.py                                  #Login, logout, password-reset, user-verify, register, etc. routes.
-│   ├── templates                                  #Auth templates for routes above.
+├── __init__.py                               #Application factory. 
+├── auth                                      #Authentication blueprint.
+│   ├── forms.py                              #Login, Register and Password Reset forms.
+│   ├── __init__.py                           #Authentication Blueprint.
+│   ├── routes.py                             #Login, logout, register, etc. routes.
+│   ├── templates                             #Auth templates for routes above.
 │   │   └── auth
 │   │       ├── _header.html
 │   │       ├── login.html
@@ -103,30 +103,30 @@ app
 │   │       ├── password_reset_request.html
 │   │       └── register.html
 │   └── utils.py
-├── config.py                                      #Configuration File. See README.MD
-├── core                                           #Core of the application.
-│   ├── __init__.py
-│   ├── models.py                                  #BaseMixin class.
-│   ├── routes.py                                  #Home route.
+├── config.py                                 #Configuration File. See README.MD
+├── core                                      
+│   ├── __init__.py                           #Core Blueprint.
+│   ├── models.py                             #BaseMixin class.
+│   ├── routes.py                             #Home route.
 │   └── templates
 │       └── core
-│           ├── components                         #Components to be include with `include` Jinja statement.
+│           ├── components                    #Components for `include` with Jinja.
 │           │   ├── inputs
 │           │   │   ├── _field_errs.html
 │           │   │   └── floating_label.html
 │           │   └── pagination.html
-│           └── layout.html                        #application layout.
-├── email                                          #Email blueprint.
-│   ├── __init__.py                                #Email send functions.
+│           └── layout.html                   #Application layout.
+├── email                                         
+│   ├── __init__.py                           #Email Blueprint and send functions.
 │   └── templates
-│       └── email                                  #Email templates.
+│       └── email                             #Email templates.
 │           ├── account_verification.html
 │           └── password_reset.html
-├── extensions                                     #Application extensions
-│   ├── bcrypt.py                                  #Flask-Bcrypt
-│   ├── database.py                                #Flask-SQLAlchemy
-│   ├── flask_login.py                             #Flask-Login
-│   ├── flask_mail.py                              #Flask-Mail
+├── extensions                                #Application extensions
+│   ├── bcrypt.py                             #Flask-Bcrypt
+│   ├── database.py                           #Flask-SQLAlchemy
+│   ├── flask_login.py                        #Flask-Login
+│   ├── flask_mail.py                         #Flask-Mail
 │   └── __init__.py
 ├── static             
 │   ├── css
@@ -135,19 +135,19 @@ app
 │       ├── logo_full.png
 │       └── logo.png
 ├── user
-│   ├── cli.py                                     #Cli for user model: add user, get password reset link.
-│   ├── enums.py                                   #UserAccountLog action types and Block reasons types.
-│   ├── forms.py                                   #Verification email request form.
-│   ├── __init__.py
-│   ├── models.py                                  #UserAccount and UserAccountLog models, login / logout functions.
-│   ├── routes.py                                  #User profile routes.
-│   └── templates                                  #Templates for routes above.
+│   ├── cli.py                                #Cli for user model: add user, get passwd reset link.
+│   ├── enums.py                              #UserAccountLog action types and Block reasons types.
+│   ├── forms.py                              #Verification email request form.
+│   ├── __init__.py                           #User Blueprint
+│   ├── models.py                             #UserAccount and UserAccountLog models
+│   ├── routes.py                             #User profile routes.
+│   └── templates                             #User templates.
 │       └── user
 │           ├── _header.html
 │           ├── profile.html
 │           └── profile_not_verified.html
 └── wsgi                                         
-    └── __init__.py                                #Application instance for `create_app` function.
+    └── __init__.py                           #Application instance for `create_app` function.
 
 ```
 
