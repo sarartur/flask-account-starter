@@ -6,7 +6,7 @@ The application comes out of the box with the following features:
 - Account Creation
 - Account Verification (enabled / disabled)
 - Password Reset
-- Login Log
+- User Activity Log
 - Automated Emails
 - Slick [Bootstrap 5](https://getbootstrap.com/docs/5.0/getting-started/introduction/) and [FontAwesome 6](https://fontawesome.com/) responsive templates.
 - Custom CLI extensions for user management
@@ -24,8 +24,10 @@ The code is written using the application factory pattern and is neat and extens
 written using Jinja2 and HTML best practices. 
 
 <p align="center">
-  <img src="/.images/login_page.png" width="600px" height='100%'>
-  <img src="/.images/reg_page.png" width="600px" height='100%'>
+  <img src="/.images/login_page.png" width="400px" height='100%'>
+  <img src="/.images/reg_page.png" width="400px" height='100%'>
+  <img src="/.images/account_log_page.png" width="400px" height='100%'>
+  <img src="/.images/password_reset_page.png" width="400px" height='100%'>
 </p>
 
 ### Getting Started
@@ -53,7 +55,6 @@ export FLASK_ENV='development'
 export SQLALCHEMY_DATABASE_URI='postgresql://postgres:123@localhost:5432/app'
 ```
 
-
 Run the migrations using `Flask-Migrate`:
 
 ```
@@ -79,7 +80,6 @@ and export variables pointing to the files and set `ACCOUNT_VERIFICATION` to `Tr
 ```
 export JWT_PRIVATE_KEY='/path/to/jwtRS256.key'
 export JWT_PUBLIC_KEY='/path/to/public/jwtRS256.key.pub'
-
 export ACCOUNT_VERIFICATION='True'
 ```
 At this point all of the apps functionality is activated. You can continue building on top of the code using the general principles of `Flask` factory patter design.

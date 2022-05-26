@@ -5,12 +5,9 @@ from flask import (
     redirect,
     url_for,
     flash,
-    request
 )
 from flask_mail import Message
 from flask_login import (
-    login_user,
-    logout_user,
     current_user,
 )
 from sqlalchemy import func
@@ -32,10 +29,8 @@ from .. import (
     bcrypt,
     email
 )
-from ..user.models import (
-    UserAccount, 
-    UserAccountLogin
-)
+from ..user.enums import AccountLogActions
+from ..user.models import UserAccount
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -47,17 +42,16 @@ def login():
             func.lower(UserAccount.email) == func.lower(form.email.data))\
             .first()
         if user:
-            if bcrypt.check_password_hash(user.password, form.password.data):
-                login_user(user, remember=form.remember_me.data)
-                db.session.add(UserAccountLogin(
-                    ip_address=request.remote_addr,
-                    user_id=user.id
-                ))
-                user.last_active = datetime.utcnow()
-                db.session.commit()
-                flash('You have been logged in!', 'success')
-                return redirect(url_for('user.profile'))
-        flash('Invalid Credentials', 'danger')
+            if user.is_blocked:
+                flash(f'Your account has been blocked. Reason: {user.block_reason.value}', 'danger')
+            else:
+                if bcrypt.check_password_hash(user.password, form.password.data):
+                    user.login(form.remember_me.data)
+                    flash('You have been logged in!', 'success')
+                    return redirect(url_for('user.profile'))
+                else:
+                    user.reg_login_failure()
+                    flash('Invalid Credentials', 'danger')
     return render_template('auth/login.html', form=form)
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
@@ -107,8 +101,7 @@ def password_reset(token):
         return redirect(redirect_route)
     form = PasswordForm()
     if form.validate_on_submit():
-        user.password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        db.session.commit()
+        user.set_new_password(passwd=form.password.data)
         flash('Password reset successfully!', 'success')
         return redirect(redirect_route)
     return render_template('auth/password_reset.html', user=user, form=form)
@@ -132,6 +125,6 @@ def user_verify(token):
 @auth_bp.route('/logout')
 @login_required(verified_only=False)
 def logout():
-    logout_user()
+    current_user.logout()
     flash('You have been logged out!', 'info')
     return redirect(url_for('auth.login'))

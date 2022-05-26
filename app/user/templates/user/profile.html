@@ -23,8 +23,13 @@
         {% if login_records.items %}
             {% for record in login_records.items %}
                 <div class="row border-bottom align-items-center py-2">
-                    <div class="col-8 text-truncate">
+                    <div class="col-3 text-truncate">
                         {{ record.ip_address }}
+                    </div>
+                    <div class="col-5 text-truncate">
+                        <span class="text-{{ record.action.value.category }}">
+                            {{ record.action.value.msg|upper }}
+                        </span>
                     </div>
                     <div class="col-4 text-end text-truncate small">
                         {{ record.timestamp.strftime('%c') }}
