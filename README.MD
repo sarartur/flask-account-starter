@@ -1,4 +1,4 @@
-## Flask-Account-Starter
+# Flask-Account-Starter
 <img src="https://img.shields.io/github/issues/sarartur/flask-account-starter">  <img src="https://img.shields.io/github/forks/sarartur/flask-account-starter">   <img src="https://img.shields.io/github/stars/sarartur/flask-account-starter">   <img src="https://img.shields.io/github/license/sarartur/flask-account-starter">
 
 
