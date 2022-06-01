@@ -10,7 +10,7 @@ def send_password_reset(user, with_flash=True):
     msg = Message(
         subject="Password Reset",
         html=render_template("email/password_reset.html", user=user),
-        recipients=[user.email],
+        recipients=[user.email]
     )
     mail.send(msg)
     if with_flash:
